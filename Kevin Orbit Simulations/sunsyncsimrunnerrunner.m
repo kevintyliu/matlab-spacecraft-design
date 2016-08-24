@@ -1,0 +1,19 @@
+function sunsyncsimrunnerrunner(filenum)
+%Takes filenum for which excel spreadsheet to write data and runs
+%sunsynchronous orbit simulations
+tic;             %Begins tracking runtime (has some issues)
+linewritecount = 2;     %First row to write data is row 2
+excelloc = strcat('SimulationData', num2str(filenum), '.xlsx');     %Excel file name
+titlerow = {'Names', 'Number of Planes', 'Sats Per Plane', 'Semimajor Axis', ...
+    'Inclination', 'Nadir Angle', 'f', 'MaxMax Revisit Time', 'AverageMax Revisit Time', ...
+    'AvgAvg Revisit Time', 'Value Below 5%', ...
+    'Value Below 10%', 'Value Below 15%', 'Value Below 20%', 'Value Below 25%', 'Value Below 30%', ...
+    'Value Below 35%', 'Value Below 40%', 'Value Below 45%', 'Value Below 50%', 'Value Below 55%', ...
+    'Value Below 60%', 'Value Below 65%', 'Value Below 70%', 'Value Below 75%', 'Value Below 80%', ...
+    'Value Below 85%', 'Value Below 90%', 'Value Below 95%'};
+xlswrite(excelloc, titlerow);   %Writes title row
+for a = 6771:100:7371        %Runs sunsychronous orbits for semimajor axes. To adjust nadir angle go into sunsyncsimrunner
+    linewritecount = sunsyncsimrunner(a, filenum, linewritecount);
+end
+totaltime = {strcat(num2str(toc/3600), ' Hours')};
+xlswrite(excelloc, totaltime, 1, 'AF8');
